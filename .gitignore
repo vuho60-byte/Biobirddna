@@ -1,0 +1,7 @@
+# Dữ liệu lớn: không commit, tải lại theo data/registry.csv
+data/**
+!data/README.md
+!data/registry.csv
+!data/SHA256SUMS.txt
+__pycache__/
+*.pyc

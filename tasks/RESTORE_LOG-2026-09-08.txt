@@ -1,0 +1,95 @@
+EDIT_MISS(nomatch) a9ca97ee research\synthesis\00-tong-hop-vong-1.md | 35 | Sauropsid | Lông/vảy, EDC | Cụm β-keratin | 2 nhóm độ
+EDIT_MISS(nomatch) a47a9b0b tasks\primordial-dna-handoff.md | root/V1 | SESSION | primordial-dna-r1 | Risks | REVIEW độc
+PYSKIP main import sys, csv, datetime; sys.stdout.reconfigure(encoding="utf-8") today="2026-
+PYSKIP main import sys; sys.stdout.reconfigure(encoding="utf-8") p="tasks/todo.md"; s=open(p
+PYSKIP main import sys,csv,hashlib,os; sys.stdout.reconfigure(encoding="utf-8") def sha(p): 
+PYSKIP main import sys; sys.stdout.reconfigure(encoding="utf-8") p="docs/04-ke-hoach-tach-ad
+PYFAIL Traceback (most recent call last): |   File "<stdin>", line 3, in <module> | FileNotFoundError: [Errno 2] No such file or directory: 'data/SHA256SUMS.txt' | 
+EDIT_MISS(nomatch) af9474a3 tasks\primordial-dna-handoff.md GB free, data/: 1.3GB |\n
+PYSKIP a59f52ad import json, urllib.request  def get(url):     with urllib.request.urlopen(url, 
+PYFAIL Traceback (most recent call last): |   File "<stdin>", line 4, in <module> | FileNotFoundError: [Errno 2] No such file or directory: '/tmp/loci_raw.tsv' | 
+PYSKIP main import random random.seed(7) ids={} for l in open("data/a2/elements.bed",encodin
+EDIT_MISS(nomatch) aebaca99 tasks\primordial-dna-handoff.md | root/code-x1 | SESSION | primordial-dna-x1 | Done | Viet l
+PYSKIP a59f52ad import csv  rows = [] with open("data/c_loci/_raw_fetch.tsv", encoding="utf-8") 
+PYSKIP main import sys; sys.stdout.reconfigure(encoding="utf-8") p="docs/04-ke-hoach-tach-ad
+EDIT_MISS(nomatch) a9a9cb8a tasks\primordial-dna-handoff.md | acpx-gemini/R6 (Main ghi thay) | SESSION | primordial-dna-
+PYSKIP a59f52ad seqs={} name=None with open("data/c_loci/BMP4/BMP4.cds363.fa") as f:     for lin
+EDIT_MISS(nomatch) a979770b tasks\primordial-dna-handoff.md | root/review-x1 | SESSION | primordial-dna-x1 | Risks | REV
+PYSKIP a59f52ad import sys sys.path.insert(0, "pipeline/p03_asr") from extract_locus import load
+PYSKIP a59f52ad import json, urllib.request def get(url):     with urllib.request.urlopen(url, t
+PYSKIP a59f52ad import json, urllib.request def get(url):     with urllib.request.urlopen(url, t
+EDIT_MISS(nofile) a59f52ad data\c_loci\loci_galGal4.tsv
+PYSKIP main import sys; sys.stdout.reconfigure(encoding="utf-8") p="docs/04-ke-hoach-tach-ad
+EDIT_MISS(nofile) a59f52ad data\c_loci\loci_galGal4.tsv
+EDIT_MISS(nofile) a59f52ad data\c_loci\loci_galGal4.tsv
+PYSKIP a59f52ad CODON_TABLE = {     'TTT':'F','TTC':'F','TTA':'L','TTG':'L','CTT':'L','CTC':'L',
+READ_RESTORE research\raw\R6a-google-survey-gemini.md
+READ_RESTORE research\raw\R6b-google-survey-gemini.md
+
+FILES:
+CLAUDE.md
+README.md
+data\README.md
+data\registry.csv
+docs\00-tai-dinh-khung-cau-hoi.md
+docs\01-thuat-ngu.md
+docs\02-nguon-du-lieu-va-cong-cu.md
+docs\03-suy-luan-nguon-goc-chao-mao.md
+docs\04-ke-hoach-tach-adn-goc.md
+env\environment.yml
+pipeline\README.md
+pipeline\p00_inventory\check_resources.sh
+pipeline\p00_inventory\probe_remote.sh
+pipeline\p02_core_map\README.md
+pipeline\p02_core_map\conserved_to_bulbul.py
+pipeline\p02_core_map\launch_full.sh
+pipeline\p02_core_map\run_a2.sh
+pipeline\p02_core_map\run_minimap_chunks.sh
+pipeline\p02_core_map\split_fasta.py
+pipeline\p02_core_map\summarize_a2.py
+pipeline\p02_core_map\tests\test_conserved_to_bulbul.py
+pipeline\p03_asr\extract_locus.py
+pipeline\p03_asr\fetch_coords.py
+research\briefs\C1-apply-corrections-docs00-02.md
+research\briefs\R1-genome-stability-ancestral.md
+research\briefs\R2-observed-evolution-domestic-mutations.md
+research\briefs\R3-innate-behaviour-personality-canalization.md
+research\briefs\R4-origins-fossils-adna-hypotheses-extinction.md
+research\briefs\R5-bulbul-genome-pipeline-feasibility.md
+research\briefs\R6-google-survey-gemini.md
+research\briefs\R6a-google-survey-gemini.md
+research\briefs\R6b-google-survey-gemini.md
+research\briefs\R7-bulbul-origin-biogeography-mutation-direction.md
+research\briefs\R8-vong2-blockers-pha3.md
+research\briefs\S1-synthesis-vong-1.md
+research\briefs\T-A-data-ops.md
+research\briefs\T-C-locus-c.md
+research\briefs\T-C2-locus-c-resume.md
+research\briefs\V1-review-vong-1.md
+research\briefs\X1-codex-conserved-to-bulbul.md
+research\briefs\X2-code-fix-a2.md
+research\briefs\X3-codex-a2-full-genome-finalize.md
+research\briefs\_COMMON.md
+research\raw\.gitkeep
+research\raw\R1-genome-stability-ancestral.md
+research\raw\R2-observed-evolution-domestic-mutations.md
+research\raw\R3-innate-behaviour-personality-canalization.md
+research\raw\R4-origins-fossils-adna-hypotheses-extinction.md
+research\raw\R5-bulbul-genome-pipeline-feasibility.md
+research\raw\R6a-google-survey-gemini.md
+research\raw\R6b-google-survey-gemini.md
+research\raw\R7-bulbul-origin-biogeography-mutation-direction.md
+research\raw\R8-vong2-blockers-pha3.md
+research\synthesis\.gitkeep
+research\synthesis\00-tong-hop-vong-1.md
+research\synthesis\01-review-vong-1.md
+research\synthesis\02-cap-nhat-thao-do-du-lieu.md
+research\synthesis\04-locus-c-v0.md
+research\synthesis\05-review-code-x1.md
+research\validate_raw.py
+tasks\checkpoint-2026-09-07.md
+tasks\lessons.md
+tasks\primordial-dna-handoff.md
+tasks\primordial-dna-plan.md
+tasks\primordial-dna-think.md
+tasks\todo.md

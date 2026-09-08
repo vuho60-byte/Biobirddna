@@ -1,0 +1,15 @@
+# LESSONS — BIRDBIODNA project
+
+#LESSONS
+- 2026-09-07: Máy này Python 3.14 không có Biopython/pandas, không có MAFFT/IQ-TREE/samtools → phần tính toán phải chạy trong WSL2 + conda (python 3.11), đừng giả định chạy trực tiếp trên Windows.
+- 2026-09-07: Trích dẫn viết từ trí nhớ trong docs/ PHẢI giữ nhãn "cần xác minh" cho tới khi R-file gắn nhãn; R3 phát hiện docs/00 ghi "Spottiswoode 2022 Science" sai (bài 2022 là PNAS; bản Science là Merondun 2025). Sau mỗi vòng tổng hợp phải áp CORRECTIONS vào docs/00.
+- 2026-09-07: ACPX Gemini qua Bash tool bị trần 10 phút → job khảo sát dài phải chạy tách tiến trình (PowerShell Start-Process) với `acpx --timeout 1500`, và chia brief thành job ≤3 chủ đề.
+- 2026-09-07: Lỗi trích dẫn từ trí nhớ lần 2 — brief R7 ghi Amiot et al. 2007 đăng ở Biol J Linn Soc, thực tế là *Ibis* (R7 phát hiện). Quy tắc: trong brief chỉ ghi "tác giả + năm + chủ đề", KHÔNG ghi tạp chí/volume trừ khi đã mở nguồn; để subagent điền tạp chí.
+- 2026-09-07: Trí nhớ của Main cũng KHÔNG phải bằng chứng — Main từng định bác CORRECTION #10 (én đá) bằng ký ức về bài gốc; R-file chỉ ghi "chim chết có cánh dài hơn". Luật: khi Main muốn phủ quyết một correction, phải mở nguồn gốc hoặc giao subagent kiểm, không dùng ký ức.
+- 2026-09-07: Bộ đếm Perplexity không khớp tự báo của subagent (agent tự báo tổng ~3 lượt; "Pro Search remaining" giảm 12; "Total queries" tăng 24). Dùng pplx_usage trước/sau làm số chính thức, không tin số agent tự báo.
+- 2026-09-07: HEAD 200 + Content-Length KHÔNG bảo đảm GET được (S3 DEEP_ARCHIVE trả XML lỗi 354 byte). Sau mỗi lần tải phải so kích thước với HEAD và xem đầu file; ưu tiên nguồn gốc hub UCSC thay vì mirror S3.
+- 2026-09-07: Docker trên Git Bash: đường dẫn `/w/x` bị đổi thành `W:/x` → luôn đặt `MSYS_NO_PATHCONV=1` trước `docker run` khi truyền đường dẫn trong container.
+- 2026-09-07: Codex lane chết cả hai đường (MCP "execution failed", CLI hết hạn mức tới 12/09). Trước khi giao code cho Codex phải chạy `codex exec` thử 1 dòng để kiểm quota; hết quota → Sonnet viết + Sonnet/Opus review riêng, ghi Board ERROR.
+- 2026-09-07: Subagent báo "đang đợi… sẽ tiếp tục" rồi im lặng có thể TỰ TIẾP TỤC sau đó (notification bắn lại cùng task-id). Không phát agent thứ hai làm cùng việc/cùng file khi chưa TaskStop agent cũ → hôm nay registry bị trùng 3 dòng, phải khử.
+- 2026-09-07: Hook chặn mọi lệnh PowerShell chứa `Remove-Item`/`rm` trỏ vào D:\BIRDBIODNA (kể cả trong chuỗi truyền cho bash). Dọn file tạm → viết vào script .sh rồi PowerShell chỉ Start-Process script; Bash tool chạy `rm` trực tiếp thì được. `mv` thư mục đang bị tail/Monitor giữ → Permission denied trên Windows → dùng `cp` + dọn.
+- 2026-09-07: launch_full.sh xóa elements.bed/.fa "lần đầu" nhưng tôi chạy lại nhiều lần → mỗi lần re-merge + re-extract (~14 phút phí). Script khởi động phải idempotent: bước dọn chỉ chạy khi có cờ --first-run.

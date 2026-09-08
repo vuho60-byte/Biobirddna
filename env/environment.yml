@@ -1,0 +1,20 @@
+# conda env cho phần tính toán (chạy trong WSL2 Ubuntu). Tạo: conda env create -f env/environment.yml
+name: birdbiodna
+channels: [conda-forge, bioconda]
+dependencies:
+  - python=3.11
+  - biopython
+  - pandas
+  - pyranges
+  - bedtools
+  - mafft
+  - iqtree>=2.3
+  - paml
+  - hyphy
+  - phast
+  - busco
+  - minimap2
+  - samtools
+  - ncbi-datasets-cli
+  - phyluce
+  - jupyterlab
