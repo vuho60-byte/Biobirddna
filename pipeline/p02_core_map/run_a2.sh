@@ -122,6 +122,21 @@ params_file_for() {
   echo "${1}.params"
 }
 
+input_id() {
+  # input_id FILE... -> chuoi "ten:size:mtime" cho tung input, de PARAMS_STR
+  # doi khi INPUT doi (loi 08/09: chay chr1 roi chay toan genome trong cung
+  # thu muc -> paf2bed/annotate bi SKIP va giu ket qua chr1 cu).
+  local out="" f
+  for f in "$@"; do
+    if [ -f "$f" ]; then
+      out="$out $(basename "$f"):$(stat -c %s "$f" 2>/dev/null):$(stat -c %Y "$f" 2>/dev/null)"
+    else
+      out="$out $(basename "$f"):missing"
+    fi
+  done
+  echo "${out# }"
+}
+
 step_needed() {
   # step_needed PARAMS_FILE PARAMS_STR FILE...  -> "true" (return 0, can
   # chay) neu FORCE=1, thieu 1 FILE bat ky, HOAC tham so PARAMS_STR khac lan
@@ -184,7 +199,7 @@ log "=== run_a2.sh bat dau (chrom=${CHROM:-ALL} force=$FORCE threads=$THREADS ch
 
 # --- Buoc 1: bigBedToBed | (loc --chrom) | merge ---------------------------
 MERGE_PARAMS_FILE="$(params_file_for "$ELEMENTS_BED")"
-MERGE_PARAMS_STR="gap=$GAP min_len=$MIN_LEN chrom=${CHROM:-ALL}"
+MERGE_PARAMS_STR="gap=$GAP min_len=$MIN_LEN chrom=${CHROM:-ALL} in=[$(input_id "$DATA_DIR/ucsc/ancRep_separate_models_rev.bw.conserved.bb")]"
 if step_needed "$MERGE_PARAMS_FILE" "$MERGE_PARAMS_STR" "$ELEMENTS_BED" "$MERGE_STATS"; then
   log "STEP bigbedtobed_merge START"
   if [ -n "$CHROM" ]; then
@@ -205,7 +220,7 @@ fi
 
 # --- Buoc 2: twoBitToFa -bed=elements.bed -----------------------------------
 TWOBIT_PARAMS_FILE="$(params_file_for "$ELEMENTS_FA")"
-TWOBIT_PARAMS_STR="fixed"
+TWOBIT_PARAMS_STR="in=[$(input_id "$ELEMENTS_BED" "$DATA_DIR/ucsc/Gallus_gallus.2bit")]"
 if step_needed "$TWOBIT_PARAMS_FILE" "$TWOBIT_PARAMS_STR" "$ELEMENTS_FA"; then
   log "STEP twobittofa START"
   MSYS_NO_PATHCONV=1 docker run --rm -v "${WIN_DATA_DIR}:/data" "$IMG_TWOBITTOFA" \
@@ -222,7 +237,7 @@ fi
 # <=chunk-bases, moi manh index nguyen khoi roi map, noi PAF lai. paf2bed van
 # tu chon hit tot nhat qua CAC MANH (co che best[qname] hien co, khong doi).
 SPLIT_PARAMS_FILE="$(params_file_for "$SPLIT_MARKER")"
-SPLIT_PARAMS_STR="chunk_bases=$CHUNK_BASES"
+SPLIT_PARAMS_STR="chunk_bases=$CHUNK_BASES in=[$(input_id "$BULBUL_FNA_HOST")]"
 if step_needed "$SPLIT_PARAMS_FILE" "$SPLIT_PARAMS_STR" "$SPLIT_MARKER"; then
   log "STEP split_genome START (chunk-bases=$CHUNK_BASES)"
   rm -rf "$GENOME_CHUNKS_DIR"
@@ -236,7 +251,7 @@ else
 fi
 
 PAF_PARAMS_FILE="$(params_file_for "$ELEMENTS_PAF")"
-PAF_PARAMS_STR="chunk_bases=$CHUNK_BASES mm_extra=$MM_EXTRA threads=$THREADS"
+PAF_PARAMS_STR="chunk_bases=$CHUNK_BASES mm_extra=$MM_EXTRA threads=$THREADS in=[$(input_id "$ELEMENTS_FA" "$BULBUL_FNA_HOST")]"
 if step_needed "$PAF_PARAMS_FILE" "$PAF_PARAMS_STR" "$ELEMENTS_PAF"; then
   log "STEP minimap2_chunks START (threads=$THREADS mm-extra=\"$MM_EXTRA\")"
   PAF_TMP="$ELEMENTS_PAF.tmp"
@@ -273,7 +288,7 @@ fi
 
 # --- Buoc 4: paf2bed --------------------------------------------------------
 PAF2BED_PARAMS_FILE="$(params_file_for "$BULBUL_CORE_BED")"
-PAF2BED_PARAMS_STR="min_identity=$MIN_IDENTITY min_coverage=$MIN_COVERAGE"
+PAF2BED_PARAMS_STR="min_identity=$MIN_IDENTITY min_coverage=$MIN_COVERAGE in=[$(input_id "$ELEMENTS_PAF" "$ELEMENTS_BED")]"
 if step_needed "$PAF2BED_PARAMS_FILE" "$PAF2BED_PARAMS_STR" "$BULBUL_CORE_BED" "$UNMAPPED_TXT" "$MAP_STATS"; then
   log "STEP paf2bed START"
   python -B "$PY" paf2bed --paf "$ELEMENTS_PAF" --out "$BULBUL_CORE_BED" \
@@ -288,7 +303,7 @@ fi
 
 # --- Buoc 5: annotate --------------------------------------------------------
 ANNOT_PARAMS_FILE="$(params_file_for "$CORE_ANNOT_TSV")"
-ANNOT_PARAMS_STR="fixed"
+ANNOT_PARAMS_STR="in=[$(input_id "$BULBUL_CORE_BED" "$BULBUL_GFF_HOST")]"
 if step_needed "$ANNOT_PARAMS_FILE" "$ANNOT_PARAMS_STR" "$CORE_ANNOT_TSV" "$ANNOT_STATS"; then
   log "STEP annotate START"
   python -B "$PY" annotate --bed "$BULBUL_CORE_BED" --gff "$BULBUL_GFF_HOST" \
