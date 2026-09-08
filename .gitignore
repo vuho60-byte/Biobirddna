@@ -5,3 +5,4 @@ data/**
 !data/SHA256SUMS.txt
 __pycache__/
 *.pyc
+.claude/
