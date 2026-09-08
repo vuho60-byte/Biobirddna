@@ -1,5 +1,26 @@
 # BIRDBIODNA — Dự án "DNA gốc của chim" (Primordial Avian Genome)
 
+> **Trạng thái: nghiên cứu đang tiến hành, chưa bình duyệt.** Repo công khai để minh bạch quy trình.
+> Mọi khẳng định mang nhãn `CONFIRMED` / `STRONG_INFERENCE` / `UNVERIFIED`; nhiều mục còn ở mức chưa xác minh.
+> Một bài do model ngoài viết đã **bị chặn** vì trích dẫn sai nguồn (xem `research/synthesis/06-review-A1.md`).
+> Kết quả tính toán là số đo thật, tái lập được bằng mã trong `pipeline/`, nhưng **chưa có kiểm định thống kê so với mô hình nền**.
+
+## Kết quả mới nhất (2026-09-08, toàn bộ bộ gene)
+
+| Chỉ số | Ngưỡng phủ 0,8 | Ngưỡng phủ 0,5 |
+|---|---|---|
+| Phần tử bảo tồn (363 loài chim) ánh xạ sang chào mào | 248.461 / 2.947.588 (8,43%) | 411.275 (13,95%) |
+| Tổng chiều dài trên bộ gene chào mào | 62,49 Mb — **6,10%** | 88,42 Mb — **8,63%** |
+| Phân bố | CDS 24,3% · intron 11,0% · liên gene 64,7% | — |
+
+Xếp theo tổng bp: Znf521, Sox6, Foxp1, Vps13b, Klhl29.
+Xếp theo **mật độ** (bp lõi/kb locus): **Hoxa5, Hoxa11, Hoxa3**, Gpr19, Dolk, Nipbl — hơn 2.000 bp/kb.
+Hai bảng khác nhau vì xếp theo tổng bp thiên vị gene dài; đọc cả hai (`pipeline/p02_core_map/README.md`).
+
+Chi tiết số liệu: `data/a2/SUMMARY.md` · nhật ký hằng ngày: `tasks/checkpoint-*.md`
+
+---
+
 Nhánh nghiên cứu mở rộng từ skill **BioBirdDNA Genetics v0.4.0** (V4: hỗ trợ quyết định di truyền màu lông chim cảnh).
 V4 trả lời "màu lông truyền thế nào". Dự án này hỏi câu lớn hơn: **phần nào của bộ gene chim KHÔNG đổi qua hàng chục triệu năm, phần nào đổi, và tái dựng "bộ gene tổ tiên" bằng tính toán được tới đâu.**
 
