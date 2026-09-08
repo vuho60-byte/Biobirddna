@@ -97,6 +97,47 @@ python -B conserved_to_bulbul.py annotate \
 - `--out`: giữ nguyên toàn bộ cột đầu vào (thường là 9 cột từ `paf2bed`), nối thêm 3 cột `feature_class`, `gene_id`, `gene_name` (rỗng nếu `intergenic`).
 - `--stats`: bảng `feature_class\tregions\tbp` cho 4 lớp; bảng `gene_id\tgene_name\tbp` top 50 gene theo tổng bp các vùng được gán cho gene đó (tính **toàn bộ chiều dài vùng BED**, không cắt theo phần giao thực tế — xem Giới hạn).
 
+### 4. `enrich` — kiểm định giàu lõi so với nền
+
+Đặc tả: `research/briefs/X5-enrichment-null-model.md` + `research/raw/A2-antigravity-null-model.md` mục 1–2 (dùng làm đặc tả kỹ thuật để viết code; A2 chưa qua review chéo — xem cuối file đó — nên không trích như tài liệu tham khảo khoa học).
+
+```
+python -B conserved_to_bulbul.py enrich \
+  --annot core_annot.tsv [--annot-accel core_annot_accel.tsv] \
+  --gff genomic.gff.gz (--genome-size N | --chrom-sizes chrom.sizes) \
+  --out gene_enrichment.tsv [--stats enrich_stats.tsv] \
+  [--min-gene-len 1000] [--min-bp 200] [--fdr 0.05]
+```
+
+- `--annot`: TSV đầu ra của `annotate` trên **bộ conserved** (vd `core_annot.tsv`). Không header; mỗi dòng là 1 vùng lõi. Chỉ dùng cột 2/3 (start/end) và **3 cột cuối** (`feature_class`, `gene_id`, `gene_name`) — tương thích với mọi số cột BED gốc, giống cách `annotate` tự đọc lại đầu vào của nó.
+- `--annot-accel` (tuỳ chọn): cùng định dạng, nhưng chạy `annotate` trên **bộ accelerated** (đối chứng âm). Có tham số này thì `--out` có thêm 3 cột `accel_bp`/`accel_fold`/`ca_ratio`.
+- `--gff`: dùng lại `_load_gff()` của `annotate` để lấy **độ dài gene** (`gene_len`, span `gene`/`pseudogene` trong GFF) — không cần `mRNA`/`exon`/`CDS` cho mục đích này.
+- `--genome-size N` **hoặc** `--chrom-sizes FILE` (bắt buộc chọn đúng 1): tổng số bp không gian xét, dùng làm mẫu số P₀. `--chrom-sizes` là file ≥2 cột (`chrom`, `size`, ...; tách bằng khoảng trắng bất kỳ), lấy tổng cột 2.
+
+**Cách tính (theo mô hình nhị thức, xem cảnh báo #1 bên dưới):**
+
+| Cột | Ý nghĩa |
+|---|---|
+| `gene_id`, `gene_name` | Lấy từ `--annot` (không đọc lại tên từ GFF) |
+| `bp_obs` | Tổng bp lõi (mọi dòng `--annot` có `gene_id` này) |
+| `gene_len` | Độ dài gene theo GFF (`_load_gff` → `gene_span`) |
+| `bp_exp` | `P₀ × gene_len` — kỳ vọng bp lõi nếu lõi rải ngẫu nhiên đều trên bộ gen |
+| `fold` | `bp_obs / bp_exp` |
+| `rank_score_p` | p-value **một phía** ("giàu hơn nền") — xấp xỉ chuẩn có hiệu chỉnh liên tục (`statistics.NormalDist`, tự tính `1 - cdf(bp_obs - 0.5)` vì bản thân `NormalDist` không có `.sf()`). **Chỉ dùng để xếp hạng** — xem cảnh báo #1 |
+| `bh_q` | Hiệu chỉnh đa kiểm định Benjamini–Hochberg trên `rank_score_p` |
+| `signif_flag` | `1` nếu `bh_q < --fdr` (mặc định 0,05) |
+| `approx_warn` | `1` nếu `gene_len × P₀ < 10` — vùng xấp xỉ chuẩn kém tin cậy |
+| `accel_bp`, `accel_fold` | Tương tự `bp_obs`/`fold` nhưng tính trên `--annot-accel` (P₀ riêng cho bộ accelerated) — chỉ có khi truyền `--annot-accel` |
+| `ca_ratio` | `fold / accel_fold`; nếu `accel_bp = 0` ghi `inf` (gene không có tín hiệu accelerated nào — dấu hiệu đặc hiệu mạnh nhất) |
+
+`P₀ = tổng bp lõi trong --annot / tổng không gian (--genome-size hoặc tổng --chrom-sizes)`. Chỉ xét gene có `gene_len ≥ --min-gene-len` **và** `bp_obs ≥ --min-bp`. `--out` sắp theo `fold` giảm dần. `--stats` (nếu truyền) ghi `p0`, `total_core_bp`, `total_space`, `genes_tested`, `genes_pass_fdr` (+ `p0_accel`/`total_accel_bp` nếu có đối chứng âm), rồi bảng top 20 theo `fold` và — nếu có `--annot-accel` — top 20 theo `ca_ratio`.
+
+**Ba cảnh báo bắt buộc đọc trước khi diễn giải kết quả `enrich`:**
+
+1. **`rank_score_p` không phải p-value hợp lệ theo nghĩa thống kê chặt.** Các base trong cùng một vùng lõi (element bảo tồn) **không độc lập** với nhau — mô hình nhị thức giả định mỗi base là 1 phép thử Bernoulli độc lập, điều này sai với dữ liệu thật (vùng lõi liền khối, không phải base rời rạc ngẫu nhiên). Cột này và `bh_q`/`signif_flag` đi kèm **chỉ dùng để xếp hạng tương đối** giữa các gene, **không** được dùng để tuyên bố "gene X giàu lõi có ý nghĩa thống kê (p < 0,05)" trong báo cáo hay công bố. (Nguồn đặc tả: `research/briefs/X5-enrichment-null-model.md` mục "Việc" #2.)
+2. **Bẫy gán gene gần nhất (nearest-gene fallacy).** Không phải mọi vùng lõi đều nằm trong thân gene; phần lớn nằm ngoài gene (liên gene). Trong cấu trúc nhiễm sắc 3D (TAD), enhancer/yếu tố điều hòa thường tác động lên promoter ở xa, "nhảy cóc" qua gene lân cận gần hơn về khoảng cách tuyến tính. `enrich` chỉ tính bp lõi đã được `annotate` gán cho gene (CDS/exon/intron theo overlap trực tiếp) — **không suy diễn** rằng vùng lõi liên gene gần một gene X thì "điều hòa gene X". (Nguồn: `research/raw/A2-antigravity-null-model.md` mục 3.)
+3. **Bảo tồn tổ tiên ≠ đặc thù chào mào.** Vùng lõi trong `--annot` bắt nguồn từ mức bảo tồn qua 363 loài chim (+ ngoài nhóm) trên toạ độ gà — phản ánh áp lực bảo tồn khung phát triển chung của tổ tiên có màng ối, **không** phải đặc trưng chọn lọc riêng của chào mào. `fold`/`rank_score_p` cao chỉ nói lên "gene này giàu vùng bảo tồn sâu hơn nền ngẫu nhiên", **không** tự nó chứng minh gene đó quyết định kiểu hình đặc thù của chào mào. (Nguồn: `research/raw/A2-antigravity-null-model.md` mục 3.)
+
 ## `run_a2.sh`
 
 ```
