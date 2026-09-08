@@ -357,11 +357,12 @@ class TestMaf2Bed(TempDirMixin, unittest.TestCase):
         self.assertIn("missing_score\t1", stats)
         self.assertIn("text_len_mismatch\t1", stats)
 
-    def test_maf_bad_column_count_errors(self):
+    def test_maf_invalid_numeric_field_is_skipped_not_crashed(self):
         # Dong 's' du 7 truong nhung field so khong phai so nguyen van phai
-        # bi coi la khoi hong (khong crash) - khac voi paf2bed (PAF sai cot
-        # thi dung chuong trinh) vi MAF la dau ra cong cu ngoai, co the co
-        # khoi le te; o day chi kiem tra rc=0 va khong co dong nao duoc map.
+        # bi coi la khoi hong (khong crash, khong SystemExit) - khac voi
+        # paf2bed (PAF sai cot thi dung chuong trinh bang SystemExit) vi MAF
+        # la dau ra cong cu ngoai, co the co khoi le te; o day chi kiem tra
+        # rc=0 va khong co dong nao duoc map (khoi duy nhat bi loai).
         maf_path = self.path("bad.maf")
         write_text(maf_path, "a score=10\ns scafA notanumber 10 + 100 AAAAAAAAAA\ns q1 0 10 + 10 AAAAAAAAAA\n")
         out_path = self.path("out.bed")
