@@ -1,18 +1,18 @@
 # TODO — BIRDBIODNA "DNA gốc của chim"
 
-## Pha 0 — Điểm bắt đầu (phiên 2026-09-07)
-- [x] Đọc V4 (skill v0.4.0), tracker 27 chủ đề, ranh giới bằng chứng
-- [x] Tái định khung 6 câu hỏi → docs/00 (sổ giả thuyết H1/H2/H3)
-- [x] Khung xương project (README, CLAUDE.md, docs 01–02, data/, pipeline/, env/)
-- [x] Brief R1–R6 trong research/briefs
-- [x] Chạy R1–R5 (Sonnet) + R6a/R6b (ACPX Gemini) → research/raw (xong 14:17, validator PASS 7/7)
-- [x] R7 nguồn gốc chào mào + chiều đột biến màu (Sonnet) — xong 14:25, validator PASS 42 dòng
-- [x] docs/03-suy-luan-nguon-goc-chao-mao.md — bản suy luận (Main viết 14:30, cần REVIEW): gốc từ đâu · có tiến hóa không · tiến hóa về gì · giả thuyết 'DNA được cải tiến bởi một nền văn minh' xử lý như H3
-- [x] Tổng hợp vòng 1 → research/synthesis/00-tong-hop-vong-1.md (S1 Opus, 14:45; Main đã đọc hết — điều chỉnh: CORRECTION #10 én đá là bổ sung cơ chế, không phải sai)
-- [x] REVIEW fresh-context V1 (Opus): NEEDS_FIX 0 BLOCKER/5 HIGH/11 MEDIUM/9 LOW → research/synthesis/01-review-vong-1.md
-- [x] Vòng sửa duy nhất: S2 sửa tổng hợp 15/15 F · C1 áp 17 CORRECTIONS docs/00 + docs/02 · Main sửa docs/03 (F04,F05,F12–F16,F24,F25)
-- [x] PROVE: validator 9/9 PASS · RECHECK 1,3 PASS · handoff 11 dòng · Perplexity Pro 78→66
-- [x] VERDICT vòng 1: PASS_WITH_ACCEPTED_RISK (U1 HAL, U5 benchmark, D06 outgroup thiếu, mọi claim gene chào mào = U/S ngoại suy)
+## Trạng thái 2026-09-08 (sau sự cố xóa + khôi phục)
+- [x] Khôi phục project từ transcript (66 file), 22 unittest PASS, git init + 6 commit
+- [x] Đội hình mới: CẤM Codex (phải xin duyệt); Claude team + Antigravity (session `birdbiodna`)
+- [x] Vá lỗi `.params` bỏ qua bước sai (nguyên nhân kết quả toàn genome hôm 07/09 giữ số liệu chr1)
+- [x] A1 (Antigravity): diễn giải 10 gene lõi + 3 cảnh báo phương pháp → `research/raw/A1-*.md`
+- [x] `annotate` thêm mật độ bp/kb + bảng xếp theo mật độ (+4 test) theo cảnh báo A1
+- [ ] Tải lại dữ liệu lõi (~1,3 GB) — đang chạy, còn bộ gene chào mào
+- [ ] V2 (Sonnet): review chéo nhãn bài A1 → `research/synthesis/06-review-A1.md`
+- [ ] code-x4 (Sonnet): bộ căn LAST cho phần tử <100 bp → `pipeline/p02b_last/`
+- [ ] Chạy A2 toàn genome (`bash pipeline/p02_core_map/launch_full.sh`) → SUMMARY + sha256
+- [ ] Báo cáo LÕI chào mào v0 theo brief S3 → `research/synthesis/03-loi-chao-mao-v0.md`
+- [ ] Chạy LAST cho nhóm ngắn, gộp BED, cập nhật báo cáo
+- [ ] Chạy lại sản phẩm C (20 locus, `data/c_loci` đã mất trong sự cố)
 
 ## Pha 1 — Môi trường & kiểm kê dữ liệu (chi tiết 7 việc P1.1–P1.7: research/synthesis/00-tong-hop-vong-1.md mục 9; P1.4 và P1.5 chạy song song, là GATE của Pha 2)
 - [ ] WSL2 + conda env từ env/environment.yml; kiểm `python -c "import Bio"`

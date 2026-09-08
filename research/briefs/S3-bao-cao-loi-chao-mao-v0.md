@@ -1,4 +1,4 @@
-​# S3 — Viết báo cáo "LÕI chào mào v0" (sản phẩm A + B)
+# S3 — Viết báo cáo "LÕI chào mào v0" (sản phẩm A + B)
 
 Output: `research/synthesis/03-loi-chao-mao-v0.md` (tiếng Việt). Thêm đúng 1 dòng `tasks/primordial-dna-handoff.md`. Không sửa file khác. **Không chạy lại pipeline** — chỉ đọc kết quả đã có.
 
