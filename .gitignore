@@ -6,3 +6,7 @@ data/**
 __pycache__/
 *.pyc
 .claude/
+!data/a2/*.tsv
+!data/a2/SUMMARY.md
+!data/a2/SHA256SUMS.txt
+!data/a2/*.log
