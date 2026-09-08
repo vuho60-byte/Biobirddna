@@ -641,7 +641,14 @@ def _load_gff(gff_path):
             [(s, e, resolve_gene(parent)) for s, e, parent in entries]
         )
 
-    return gene_index, cds_index, exon_index
+    gene_span = {}
+    for _scaf, rows in gene_raw.items():
+        for start0, end_i, gene_id in rows:
+            span = end_i - start0
+            if span > gene_span.get(gene_id, 0):
+                gene_span[gene_id] = span
+
+    return gene_index, cds_index, exon_index, gene_span
 
 
 def _classify_region(chrom, start, end, gene_index, cds_index, exon_index):
@@ -669,8 +676,12 @@ def _classify_region(chrom, start, end, gene_index, cds_index, exon_index):
     return "intergenic", "", ""
 
 
+MIN_GENE_LEN_FOR_DENSITY = 1000
+MIN_BP_FOR_DENSITY = 200
+
+
 def cmd_annotate(args):
-    gene_index, cds_index, exon_index = _load_gff(args.gff)
+    gene_index, cds_index, exon_index, gene_span = _load_gff(args.gff)
 
     class_bp = Counter()
     class_count = Counter()
@@ -714,9 +725,28 @@ def cmd_annotate(args):
             sf.write("feature_class\tregions\tbp\n")
             for fc in ("CDS", "exon_noncoding", "intron", "intergenic"):
                 sf.write("{}\t{}\t{}\n".format(fc, class_count.get(fc, 0), class_bp.get(fc, 0)))
-            sf.write("\ngene_id\tgene_name\tbp\n")
+            sf.write("\ngene_id\tgene_name\tbp\tgene_len\tbp_per_kb\n")
             for gene_id, bp in gene_bp.most_common(50):
-                sf.write("{}\t{}\t{}\n".format(gene_id, gene_name_lookup.get(gene_id, ""), bp))
+                glen = gene_span.get(gene_id, 0)
+                dens = (1000.0 * bp / glen) if glen else 0.0
+                sf.write("{}\t{}\t{}\t{}\t{:.2f}\n".format(
+                    gene_id, gene_name_lookup.get(gene_id, ""), bp, glen, dens))
+
+            # Bang thu hai: xep theo MAT DO (bp loi tren moi kb chieu dai gene).
+            # Xep theo tong bp thien vi gene dai - canh bao cua A1/Antigravity
+            # (research/raw/A1-antigravity-gene-interpretation.md muc 5).
+            sf.write("\n# xep theo mat do; loc gene_len >= {} bp va bp >= {}\n".format(
+                MIN_GENE_LEN_FOR_DENSITY, MIN_BP_FOR_DENSITY))
+            sf.write("gene_id\tgene_name\tbp\tgene_len\tbp_per_kb\n")
+            dens_rows = []
+            for gene_id, bp in gene_bp.items():
+                glen = gene_span.get(gene_id, 0)
+                if glen >= MIN_GENE_LEN_FOR_DENSITY and bp >= MIN_BP_FOR_DENSITY:
+                    dens_rows.append((1000.0 * bp / glen, gene_id, bp, glen))
+            dens_rows.sort(key=lambda r: (-r[0], r[1]))
+            for dens, gene_id, bp, glen in dens_rows[:50]:
+                sf.write("{}\t{}\t{}\t{}\t{:.2f}\n".format(
+                    gene_id, gene_name_lookup.get(gene_id, ""), bp, glen, dens))
 
     return 0
 

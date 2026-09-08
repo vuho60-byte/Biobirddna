@@ -137,3 +137,13 @@ python -B -m unittest discover -s pipeline/p02_core_map/tests -v
 ```
 
 18 test (unittest thuần, dữ liệu nhúng ngay trong `tests/test_conserved_to_bulbul.py`, không đọc/ghi ngoài thư mục tạm của test): `merge` (gộp theo gap/min-len đúng số liệu tay tính, đọc từ stdin, báo lỗi khi thứ tự sai/chrom lặp lại/thiếu cột, input rỗng), `paf2bed` (chọn hit tốt nhất qua mapq→matches→alnlen kèm test tie-break riêng cho tầng `nmatch` và tầng `alnlen`, 2 lý do loại + `no_hit` qua `--query-list`, fallback khi không có `--query-list`, báo lỗi cột PAF thiếu), `annotate` (CDS/exon_noncoding/intron/intergenic trên nhiều scaffold, gene không có exon nào vẫn ra `intron` đúng, 2 gene chồng tọa độ cùng scaffold chọn đúng gene giao lớn hơn, thân `pseudogene` ngoài exon ra `intron` + `gene_name` lấy `Name`/fallback ID, thống kê bp/gene), và `--help` (top-level + cả 3 lệnh con thoát mã 0).
+
+## Chuẩn hóa mật độ lõi (thêm 2026-09-08)
+
+`annotate --stats` xuất **hai** bảng gene:
+1. Xếp theo **tổng bp lõi** (như trước), nay có thêm cột `gene_len` và `bp_per_kb`.
+2. Xếp theo **mật độ** `bp_per_kb` = 1000 × bp lõi / chiều dài locus gene, lọc `gene_len ≥ 1000` và `bp ≥ 200` (hằng số `MIN_GENE_LEN_FOR_DENSITY`, `MIN_BP_FOR_DENSITY`).
+
+Lý do: xếp theo tổng bp thiên vị gene dài — gene thần kinh loại "mega-gene" (Reln, Dlg2, Tenm4, Sema3a) dài hàng trăm kb nên luôn đứng đầu bất kể mật độ. Cảnh báo này đến từ `research/raw/A1-antigravity-gene-interpretation.md` mục 5. Đọc **cả hai** bảng khi diễn giải; chỉ dùng bảng 1 là sai phương pháp.
+
+Vẫn còn hai điểm mù chưa xử lý (ghi để không quên): vùng liên gene đang gán cho gene có giao nhiều nhất, trong khi enhancer thật có thể điều khiển gene cách 500 kb; và annotation của assembly scaffold thiếu UTR nên một phần "liên gene" thực ra là intron/UTR.
