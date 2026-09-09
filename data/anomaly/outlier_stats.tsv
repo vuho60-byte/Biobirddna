@@ -1,0 +1,23 @@
+metric	value
+n_sequences	14003
+z_threshold	4
+mean_gc	0.523138
+std_gc	0.081479
+mean_gc3	0.608425
+std_gc3	0.17048
+mean_codon_dist	7.56142
+std_codon_dist	2.61245
+mean_kmer_js	0.10787
+std_kmer_js	0.0655833
+
+n_flags	count
+0	13887
+1	89
+2	27
+3	0
+
+measure	p50	p90	p99
+z_gc	-0.11351	1.40501	2.27289
+z_gc3	-0.100089	1.41271	1.98951
+codon_dist	7.18311	10.4717	16.4857
+kmer_js	0.09271	0.19696	0.292312

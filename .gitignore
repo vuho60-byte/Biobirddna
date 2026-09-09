@@ -10,3 +10,5 @@ __pycache__/
 !data/a2/SUMMARY.md
 !data/a2/SHA256SUMS.txt
 !data/a2/*.log
+!data/anomaly/*.tsv
+!data/anomaly/*.md
