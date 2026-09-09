@@ -14,6 +14,19 @@
 | Phần vùng mã hóa của chào mào nằm trong lõi | **59,8%** (giao base-level) | — |
 | Làm giàu so với rải ngẫu nhiên | **9,96 lần** | — |
 
+### Đối chứng âm (2026-09-09)
+
+Chạy **cùng quy trình, cùng tham số** trên bộ vùng *tiến hóa nhanh* (cùng nguồn UCSC 363 loài, chỉ khác dấu độ lệch so với mô hình trung tính):
+
+| | Bảo tồn | Tiến hóa nhanh |
+|---|---|---|
+| Phần tử đưa vào | 2.947.588 | 4.054.556 |
+| Ánh xạ được sang chào mào | 248.461 (8,43%) | **1.133 (0,03%)** |
+
+Chênh **281 lần** dù bộ tiến hóa nhanh có nhiều phần tử hơn. Quy trình phân biệt được vùng chịu ràng buộc với vùng tự do biến đổi; tín hiệu bảo tồn không phải sản phẩm phụ của công cụ căn trình tự.
+
+Chi tiết và 10 hướng mở rộng: `docs/05-phat-hien-va-huong-mo-rong.md`
+
 Số liệu tính bằng `pipeline/p02_core_map/overlap_stats.py` (giao từng base, có gộp trùng lặp).
 Bảng phân loại của `annotate` cộng nguyên chiều dài mỗi vùng nên cho số cao hơn (76,8% / 12,6 lần); **không dùng bảng đó cho phát biểu dạng phần trăm**.
 
