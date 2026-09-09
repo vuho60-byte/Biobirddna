@@ -6,7 +6,7 @@ sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding="utf-8")
 REQUIRED = ["## 1.", "## 2.", "## 3.", "## 4.", "## 5.", "## 6."]
 LABELS = ("CONFIRMED", "STRONG_INFERENCE", "UNVERIFIED")
 fail = 0
-for path in sorted(glob.glob("research/raw/R[1-57-9]-*.md")):
+for path in sorted(glob.glob("research/raw/R[0-9]*-*.md")):
     txt = open(path, encoding="utf-8").read()
     missing = [h for h in REQUIRED if h not in txt]
     # rows of section 2 table: lines starting with '|' between '## 2.' and '## 3.'
