@@ -39,6 +39,10 @@ usage() {
 Dung: run_a2.sh [tuy chon]
 
 Tuy chon:
+  --conserved-bb PATH   Bo vung dau vao trong container (mac dinh
+                         /data/ucsc/...conserved.bb). Dung
+                         /data/ucsc/...accelerated.bb cho doi chung am.
+  --out-dir DIR         Thu muc ket qua tren host (mac dinh <data>/a2).
   --chrom CHROM         Chi chay tren 1 NST ga (vd chr1) de benchmark; loc
                          ngay tren pipe bigBedToBed, khong ghi all.bed.
   --force                Chay lai moi buoc du output (va tham so) da khop.
@@ -78,6 +82,11 @@ DATA_DIR_OVERRIDE=""
 while [ $# -gt 0 ]; do
   case "$1" in
     --chrom) CHROM="$2"; shift 2 ;;
+    # --conserved-bb: doi bo vung dau vao (vd accelerated.bb lam doi chung am).
+    # Duong dan tinh THEO TRONG CONTAINER, bat dau bang /data/.
+    --conserved-bb) CONSERVED_BB_OVERRIDE="$2"; shift 2 ;;
+    # --out-dir: thu muc ket qua rieng (mac dinh data/a2). Nhan duong dan tren HOST.
+    --out-dir) OUT_DIR_OVERRIDE="$2"; shift 2 ;;
     --force) FORCE=1; shift ;;
     --threads) THREADS="$2"; shift 2 ;;
     --chunk-bases) CHUNK_BASES="$2"; shift 2 ;;
@@ -96,12 +105,12 @@ done
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(cd "$SCRIPT_DIR/../.." && pwd)"
 DATA_DIR="${DATA_DIR_OVERRIDE:-$PROJECT_DIR/data}"
-OUT_DIR="$DATA_DIR/a2"
+OUT_DIR="${OUT_DIR_OVERRIDE:-$DATA_DIR/a2}"
 LOG="$OUT_DIR/run.log"
 PY="$SCRIPT_DIR/conserved_to_bulbul.py"
 SPLIT_PY="$SCRIPT_DIR/split_fasta.py"
 
-CONSERVED_BB="/data/ucsc/ancRep_separate_models_rev.bw.conserved.bb"
+CONSERVED_BB="${CONSERVED_BB_OVERRIDE:-/data/ucsc/ancRep_separate_models_rev.bw.conserved.bb}"
 CHICKEN_2BIT="/data/ucsc/Gallus_gallus.2bit"
 BULBUL_FNA_HOST="$DATA_DIR/ncbi/GCA_013400435.1/GCA_013400435.1_ASM1340043v1_genomic.fna.gz"
 BULBUL_GFF_HOST="$DATA_DIR/ncbi/GCA_013400435.1/GCA_013400435.1_ASM1340043v1_genomic.gff.gz"
@@ -199,7 +208,7 @@ log "=== run_a2.sh bat dau (chrom=${CHROM:-ALL} force=$FORCE threads=$THREADS ch
 
 # --- Buoc 1: bigBedToBed | (loc --chrom) | merge ---------------------------
 MERGE_PARAMS_FILE="$(params_file_for "$ELEMENTS_BED")"
-MERGE_PARAMS_STR="gap=$GAP min_len=$MIN_LEN chrom=${CHROM:-ALL} in=[$(input_id "$DATA_DIR/ucsc/ancRep_separate_models_rev.bw.conserved.bb")]"
+MERGE_PARAMS_STR="gap=$GAP min_len=$MIN_LEN chrom=${CHROM:-ALL} bb=$CONSERVED_BB in=[$(input_id "$DATA_DIR/${CONSERVED_BB#/data/}")]"
 if step_needed "$MERGE_PARAMS_FILE" "$MERGE_PARAMS_STR" "$ELEMENTS_BED" "$MERGE_STATS"; then
   log "STEP bigbedtobed_merge START"
   if [ -n "$CHROM" ]; then

@@ -10,8 +10,12 @@
 | Chỉ số | Ngưỡng phủ 0,8 | Ngưỡng phủ 0,5 |
 |---|---|---|
 | Phần tử bảo tồn (363 loài chim) ánh xạ sang chào mào | 248.461 / 2.947.588 (8,43%) | 411.275 (13,95%) |
-| Tổng chiều dài trên bộ gene chào mào | 62,49 Mb — **6,10%** | 88,42 Mb — **8,63%** |
-| Phân bố | CDS 24,3% · intron 11,0% · liên gene 64,7% | — |
+| Tổng chiều dài trên bộ gene chào mào (đã gộp trùng lặp) | 61,50 Mb — **6,00%** | — |
+| Phần vùng mã hóa của chào mào nằm trong lõi | **59,8%** (giao base-level) | — |
+| Làm giàu so với rải ngẫu nhiên | **9,96 lần** | — |
+
+Số liệu tính bằng `pipeline/p02_core_map/overlap_stats.py` (giao từng base, có gộp trùng lặp).
+Bảng phân loại của `annotate` cộng nguyên chiều dài mỗi vùng nên cho số cao hơn (76,8% / 12,6 lần); **không dùng bảng đó cho phát biểu dạng phần trăm**.
 
 Xếp theo tổng bp: Znf521, Sox6, Foxp1, Vps13b, Klhl29.
 Xếp theo **mật độ** (bp lõi/kb locus): **Hoxa5, Hoxa11, Hoxa3**, Gpr19, Dolk, Nipbl — hơn 2.000 bp/kb.

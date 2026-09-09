@@ -19,8 +19,8 @@ I am a bird keeper and independent researcher in Vietnam. Over the past three da
 **What the project does.** It identifies the regions of the bulbul genome that have stayed nearly unchanged across the avian lineage. It takes the UCSC 363-bird phyloP conserved set, merges 70.4 million significant sites into 2.95 million elements on the chicken assembly, aligns them onto the bulbul genome in chunks, and annotates them against the NCBI gene set.
 
 **Measured results (reproducible from the repo).**
-- 248,461 conserved elements mapped, covering 62.5 Mb — 6.10% of the bulbul genome.
-- 76.8% of all bulbul coding sequence falls inside these conserved regions, versus 4.71% of the non-coding genome — roughly a 12.6-fold enrichment.
+- 248,461 conserved elements mapped, covering 61.5 Mb after merging overlaps — 6.00% of the bulbul genome.
+- 59.8% of all bulbul coding sequence falls inside these conserved regions, a 9.96-fold enrichment over random expectation. (Base-level intersection; a first pass using per-region classification inflated this to 76.8% / 12.6-fold and a reviewer caught it.)
 - Ranking genes by core density rather than total base count puts the Hoxa cluster on top (Hoxa3, Hoxa5, Hoxa6, Hoxa11, over 1,800 conserved bp per kb of locus).
 - Whole run: 20 minutes 40 seconds, peak container memory 49% of a 1.86 GB limit.
 
@@ -52,8 +52,8 @@ Tôi là người nuôi chim và nghiên cứu độc lập ở Việt Nam. Ba n
 **Dự án làm gì.** Tìm những vùng trong bộ gene chào mào gần như không đổi suốt lịch sử lớp chim: lấy tập vùng bảo tồn của 363 loài chim từ UCSC, gộp 70,4 triệu điểm thành 2,95 triệu phần tử trên bộ gene gà, căn sang bộ gene chào mào theo mảnh, rồi đối chiếu với chú giải gene của NCBI.
 
 **Kết quả đo được (tái lập từ repo).**
-- 248.461 phần tử ánh xạ được, phủ 62,5 triệu base — 6,10% bộ gene chào mào.
-- 76,8% toàn bộ vùng mã hóa protein của chào mào nằm trong vùng bảo tồn, so với 4,71% phần bộ gene ngoài vùng mã hóa — giàu gấp khoảng 12,6 lần.
+- 248.461 phần tử ánh xạ được, phủ 61,5 triệu base sau khi gộp trùng lặp — 6,00% bộ gene chào mào.
+- 59,8% vùng mã hóa protein của chào mào nằm trong vùng bảo tồn, giàu gấp 9,96 lần so với rải ngẫu nhiên. (Tính giao base-level; lần đầu dùng bảng phân loại theo vùng cho ra 76,8% / 12,6 lần, reviewer đã bắt được.)
 - Xếp gene theo mật độ lõi thay vì tổng số base đưa cụm Hoxa lên đầu (Hoxa3, Hoxa5, Hoxa6, Hoxa11, hơn 1.800 base lõi mỗi kb).
 - Toàn bộ lần chạy: 20 phút 40 giây, bộ nhớ đỉnh 49% trần 1,86 GB.
 
@@ -79,3 +79,13 @@ Vũ Hồ — vuho60@gmail.com
 - Không nên dùng từ "khám phá" hay "phát hiện mới" cho phần sinh học; điểm mạnh của thư là quy trình và tính minh bạch.
 - Nếu muốn tăng sức thuyết phục: đợi chạy xong kiểm định thống kê và bộ căn đoạn ngắn rồi hãy gửi, khi đó phần "đang tắc" chuyển thành "đã làm được", và có thể nêu con số mới cho họ đọc.
 - Anthropic hiếm khi cấp model riêng qua email hỗ trợ. Đường thực tế hơn: hỏi về nâng gói hoặc hạn mức, và hỏi thẳng xem có chương trình nghiên cứu độc lập nào không.
+
+
+---
+
+## Cập nhật 2026-09-09 — đã sửa số trong bản nháp Gmail
+
+Bản nháp trong Gmail đã cập nhật: số đúng là **59,8%** và **9,96 lần** (tính bằng
+`pipeline/p02_core_map/overlap_stats.py`, giao từng base, có gộp trùng lặp).
+Thư cũng thêm một mục thứ ba trong phần "Claude Code có ích": chính agent review
+của Claude đã bắt lỗi trong số liệu do Claude tạo ra — đó là điểm mạnh nên kể.
