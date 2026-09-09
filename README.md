@@ -23,7 +23,7 @@ Chạy **cùng quy trình, cùng tham số** trên bộ vùng *tiến hóa nhanh
 | Phần tử đưa vào | 2.947.588 | 4.054.556 |
 | Ánh xạ được sang chào mào | 248.461 (8,43%) | **1.133 (0,03%)** |
 
-Chênh **281 lần** dù bộ tiến hóa nhanh có nhiều phần tử hơn. Quy trình phân biệt được vùng chịu ràng buộc với vùng tự do biến đổi; tín hiệu bảo tồn không phải sản phẩm phụ của công cụ căn trình tự.
+Chênh **281 lần** dù bộ tiến hóa nhanh có nhiều phần tử hơn. Điều này loại bỏ giả thuyết "công cụ căn khớp bừa", nhưng **không** chứng minh vùng bảo tồn có chức năng: vùng tăng tốc khó căn vì chúng phân kỳ, mà phân kỳ là định nghĩa của chúng. Đối chứng âm đúng nghĩa (hoán vị vị trí ngẫu nhiên) chưa làm. Xem `docs/05` Phần D.
 
 Chi tiết và 10 hướng mở rộng: `docs/05-phat-hien-va-huong-mo-rong.md`
 

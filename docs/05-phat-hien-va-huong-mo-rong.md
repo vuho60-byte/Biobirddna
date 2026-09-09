@@ -105,3 +105,47 @@ Quét 14.003 vùng mã hóa bằng ba thước đo thành phần độc lập (G
 5. **B4** (vùng tăng tốc riêng chào mào) — hướng có tính mới cao nhất, làm khi ba việc trên xong.
 
 Ba việc đầu nằm gọn trong hai ngày làm việc với tài nguyên hiện tại.
+
+
+---
+
+## PHẦN D — Đính chính sau phản biện (2026-09-09, cùng ngày)
+
+Ba phát biểu ở Phần A đã bị hạ mức sau khi Antigravity phản biện và tôi kiểm lại bằng chính tệp chú giải.
+
+### D1. Bảng gene "giàu lõi" phần lớn là giả tạo do mô hình gene cụt
+
+Kiểm tỉ lệ CDS trên chiều dài locus trong GFF chào mào:
+
+| Gene | Locus (bp) | CDS (bp) | CDS/locus | Kết luận |
+|---|---|---|---|---|
+| Arc | 1.185 | 1.185 | 1,00 | mô hình gene CỤT — chỉ có CDS, không UTR/intron |
+| Drd1 | 1.356 | 1.356 | 1,00 | mô hình gene CỤT |
+| Ntrk2 | 1.116 | 327 | 0,29 | cụt nặng (gene thật ở chim dài hàng trăm kb) |
+| Robo1 (1 trong 3 bản ghi) | 327 | 327 | 1,00 | mảnh vụn |
+| Egr1 | 1.835 | 1.527 | 0,83 | ngắn, ít intron |
+| Foxp2 | 91.384 | 1.818 | 0,02 | bình thường |
+| Foxp1 | 160.237 | 2.112 | 0,01 | bình thường |
+
+Vì phần mã hóa vốn giàu lõi nhất, gene có mẫu số bằng đúng CDS sẽ có mật độ thổi phồng. **Fold 17,7 của Drd1 và 17,0 của Arc gần như hoàn toàn là hiện tượng này.** Foxp2 (3,9) và Foxp1 (5,0) vẫn đáng tin vì mô hình gene đầy đủ.
+
+**Sửa bắt buộc trước khi dùng bảng gene:** lọc bỏ gene có `CDS/locus > 0,9`, hoặc chuyển sang mô hình nền **phân tầng** (tính kỳ vọng riêng cho CDS, intron, vùng liên gene), hoặc dùng hoán vị đối sánh theo chiều dài CDS và số exon.
+
+### D2. "Gene sắc tố ít bị ràng buộc" — không đứng vững
+
+Sox10 (fold 4,7) và Kit (1,4) điều hòa mào thần kinh và tạo máu; đột biến mất chức năng thường gây chết phôi. Không thể gọi nhóm này là ít ràng buộc.
+
+**Cách giải thích hợp lý hơn — thiên lệch quan sát:** người nuôi chim chỉ thấy đột biến ở những gene mà con vật còn sống để mang màu. Đột biến ở gene thiết yếu chết từ giai đoạn phôi nên không bao giờ vào danh mục. Điều này giải thích vì sao danh mục màu trong nghề tập trung vào một nhóm gene hẹp (OCA2, TYRP1, SLC45A2, MLPH) chứ không rải đều trên mọi gene sắc tố.
+
+Ngoài ra Oca2 (fold 0,3) là locus lớn với intron rất dài, nên mật độ bị pha loãng cơ học — lại là lỗi mẫu số như D1, chiều ngược lại.
+
+### D3. Đối chứng âm: giá trị hẹp hơn tôi đã viết
+
+Vùng tăng tốc khó ánh xạ **vì chúng phân kỳ**, mà phân kỳ chính là định nghĩa của chúng. Một phần của chênh lệch 281 lần là hệ quả tất yếu của thuật toán căn trình tự, gần với lập luận vòng tròn.
+
+- **Nó loại bỏ được:** giả thuyết "công cụ căn khớp bừa bất kỳ đoạn nào".
+- **Nó KHÔNG chứng minh:** vùng bảo tồn có chức năng sinh học.
+- **Cảnh báo thêm:** vùng tăng tốc chịu chọn lọc dương hoặc chuyển đổi gene thiên vị GC, nên không phải "chuỗi trung tính ngẫu nhiên" — nó không phải đối chứng âm chuẩn theo nghĩa thống kê.
+- **Chưa kết luận được:** 91,57% vùng bảo tồn không ánh xạ được có thể do khoảng trống lắp ráp của bộ gene chào mào (mức scaffold), không nhất thiết do chào mào mất chúng.
+
+**Đối chứng âm đúng nghĩa vẫn phải là hoán vị vị trí ngẫu nhiên (B2), chưa làm.**
