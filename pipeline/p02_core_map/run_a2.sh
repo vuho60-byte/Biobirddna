@@ -184,6 +184,15 @@ win_path() {
 
 WIN_DATA_DIR="$(win_path "$DATA_DIR")"
 
+# Duong dan cua OUT_DIR nhin TU TRONG CONTAINER: /data + phan duoi DATA_DIR.
+# Bat buoc dung bien nay thay vi viet cung /data/a2 (loi 09/09: --out-dir
+# a2_accel nhung minimap2 van tro /data/a2/genome_chunks).
+case "$OUT_DIR" in
+  "$DATA_DIR"/*) OUT_DIR_IN_CONTAINER="/data/${OUT_DIR#"$DATA_DIR"/}" ;;
+  "$DATA_DIR")   OUT_DIR_IN_CONTAINER="/data" ;;
+  *) echo "run_a2.sh: --out-dir phai nam trong $DATA_DIR (nhan: $OUT_DIR)" >&2; exit 4 ;;
+esac
+
 CPU_COUNT="$(nproc 2>/dev/null || echo 0)"
 if [ "$CPU_COUNT" -gt 2 ] 2>/dev/null; then
   DEFAULT_THREADS=$((CPU_COUNT - 2))
@@ -233,7 +242,7 @@ TWOBIT_PARAMS_STR="in=[$(input_id "$ELEMENTS_BED" "$DATA_DIR/ucsc/Gallus_gallus.
 if step_needed "$TWOBIT_PARAMS_FILE" "$TWOBIT_PARAMS_STR" "$ELEMENTS_FA"; then
   log "STEP twobittofa START"
   MSYS_NO_PATHCONV=1 docker run --rm -v "${WIN_DATA_DIR}:/data" "$IMG_TWOBITTOFA" \
-    twoBitToFa "$CHICKEN_2BIT" "/data/a2/elements.fa" -bed="/data/a2/elements.bed"
+    twoBitToFa "$CHICKEN_2BIT" "$OUT_DIR_IN_CONTAINER/elements.fa" -bed="$OUT_DIR_IN_CONTAINER/elements.bed"
   save_params "$TWOBIT_PARAMS_FILE" "$TWOBIT_PARAMS_STR"
   log "STEP twobittofa END"
 else
@@ -278,7 +287,7 @@ if step_needed "$PAF_PARAMS_FILE" "$PAF_PARAMS_STR" "$ELEMENTS_PAF"; then
     log "CHUNK $cb START"
     MSYS_NO_PATHCONV=1 docker run --rm -v "${WIN_DATA_DIR}:/data" "$IMG_MINIMAP2" \
         minimap2 -x asm20 $MM_EXTRA -t "$THREADS" --secondary=no -c \
-        "/data/a2/genome_chunks/$cb" "/data/a2/elements.fa" >> "$PAF_TMP"
+        "$OUT_DIR_IN_CONTAINER/genome_chunks/$cb" "$OUT_DIR_IN_CONTAINER/elements.fa" >> "$PAF_TMP"
     t1=$(date +%s)
     log "CHUNK $cb END elapsed=$((t1 - t0))s lines=$(wc -l < "$PAF_TMP")"
   done
